@@ -8,7 +8,8 @@
 #SBATCH --open-mode=append
 #SBATCH --mail-type=ALL
 
-ml python/3.6.1
+ml python/3.9.0
+source /home/users/dtadres/.env_brainsss_david/bin/activate
 # ml antspy/0.2.2
 date
 python3 -u /home/users/dtadres/brainsss_david/scripts/stitch_nii_only_Ashley.py
