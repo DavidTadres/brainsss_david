@@ -80,7 +80,8 @@ for date in dates:
             print('concatenated ch1')
             # save stiched brain
             save_file = os.path.join(directory,
-                                     'ch1_stitched.nii')  # it is important this is saved as ch1 rather than channel so it doesn't try to get restitched if the code runs twice
+                                     'ch1_stitched.nii')  # it is important this is saved as ch1 rather than channel so
+                                                          # it doesn't try to get restitched if the code runs twice
             aff = np.eye(4)
             img = nib.Nifti1Image(stitched_brain_ch1, aff)
             img.to_filename(save_file)
