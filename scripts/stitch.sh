@@ -11,4 +11,4 @@
 ml python/3.6.1
 # ml antspy/0.2.2
 date
-python3 -u /home/users/david/brainsss_david/scripts/stitch_nii_only_Ashley.py
+python3 -u /home/users/dtadres/brainsss_david/scripts/stitch_nii_only_Ashley.py
