@@ -42,8 +42,7 @@ Log onto sherlock (ssh sunetid@login.sherlock.stanford.edu)
 > cd brainsss_david
 > pip install --upgrade pip
 > pip install -e .
-#> pip install cmake
-> pip3 install antspyx # also doesn't work
+> pip3 install antspyx 
 > pip3 install opencv-python-headless
 # > pip install antspyx===0.3.2 # gave an error
 # > pip install antspyx # gave an error
