@@ -44,6 +44,7 @@ Log onto sherlock (ssh sunetid@login.sherlock.stanford.edu)
 > pip install -e .
 > pip3 install antspyx 
 > pip3 install opencv-python-headless
+> pip install natsort
 # > pip install antspyx===0.3.2 # gave an error
 # > pip install antspyx # gave an error
 #> cd ..
