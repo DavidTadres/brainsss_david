@@ -14,7 +14,7 @@ import gc
 dates = ['20231130__queue__']  # as of 4-27 4-5 still has one bad fly as does 330
 for date in dates:
     print('STARTING DATE:', str(date))
-    dataset_path = "/oak/stanford/groups/trc/data/Ashley2/imports/" + str(date)
+    dataset_path = "/oak/stanford/groups/trc/data/dtadres/imports/" + str(date)
     # dataset_path = "/oak/stanford/groups/trc/data/krave/bruker_data/imports/" + str(date)
 
     fly_files = os.listdir(dataset_path)  ## find directory names, they are the fly names
