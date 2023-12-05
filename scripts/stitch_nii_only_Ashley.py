@@ -30,8 +30,8 @@ folder_name_to_target = 'func' # All my folders with functional imaging are call
 
 for date in dates:
     print('STARTING DATE:', str(date))
-    #dataset_path = Path("/oak/stanford/groups/trc/data/David/Bruker/imports/", date)
-    dataset_path = Path("/Volumes/groups/trc/data/David/Bruker/imports", date)
+    dataset_path = Path("/oak/stanford/groups/trc/data/David/Bruker/imports/", date)
+    #dataset_path = Path("/Volumes/groups/trc/data/David/Bruker/imports", date)
 
     fly_files = os.listdir(dataset_path)  ## find directory names, they are the fly names
     fly_folders = []
