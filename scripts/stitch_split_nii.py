@@ -113,12 +113,8 @@ for current_date in dates:
                                 # Except in the last one - Since we know how many frames we expect (see above), it's just
                                 # the rest of the preallocated numpy array.
                                 else:
-                                    if buggy_brukerbridge:
-                                        full_brain[:, :, :, current_start_index:-2] = \
-                                            nib.load(Path(current_folder, current_file)).get_fdata().astype(np.uint16)
-                                    else:
-                                        full_brain[:, :, :, current_start_index:-1] = \
-                                            nib.load(Path(current_folder, current_file)).get_fdata().astype(np.uint16)
+                                    full_brain[:, :, :, current_start_index::] = \
+                                        nib.load(Path(current_folder, current_file)).get_fdata().astype(np.uint16)
                                 counter +=1
                             # save stiched brain
                             aff = np.eye(4) # https://nipy.org/nibabel/coordinate_systems.html
