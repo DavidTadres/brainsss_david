@@ -47,11 +47,10 @@ for date in dates:
         # Find folders that are called 'func1', 'func2' etc.
         for func_dir in fly_directory.iterdir():
             if folder_name_to_target in func_dir.name:
-                print(folder_name_to_target)
+                print(func_dir.name)
                 # Find folders that are called 'T-Series'
                 for tseries_folder in Path(func_dir).iterdir():
-                    if 'T-Series' in tseries_folder.name:
-                        print(tseries_folder)
+                    if 'TSeries' in tseries_folder.name:
                         files = os.listdir(tseries_folder)
                         print(files)
                         full_brain_ch1 = []
