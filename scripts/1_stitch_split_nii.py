@@ -23,7 +23,7 @@ import xml.etree.ElementTree as ET
 import traceback
 
 # get to files
-dates = ['20231130__queue__']  # must be a string
+dates = ['20231201__queue__']  # must be a string
 
 folder_name_to_target = 'func' # All my folders with functional imaging are called func, e.g. 'func1', 'func2' etc.
 
