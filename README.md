@@ -120,7 +120,8 @@ There are currently three main ways to use this package:
       - These flies must be in your dataset_path
       - These fly folders must contain a subfolder with 'func' or 'anat' in the name.
       - This func or anat folder must have a subfolder called imaging
-      - This imaging folder must contain a file named functional_channel_1.nii (or anatomical_channel_1.nii), which will be motion corrected.
+      - This imaging folder must contain a file named functional_channel_1.nii (or anatomical_channel_1.nii), 
+        which will be motion corrected.
       - If a functional_channel_2.nii exists, the registration parameters from channel 1 will be applied to channel 2.
       - the --flies flag accepts a comma separated list (or one fly)
       - if you want to moco only func or only anat, add the flag --dirtype func (or --dirtype anat).

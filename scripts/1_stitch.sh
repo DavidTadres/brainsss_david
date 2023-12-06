@@ -12,4 +12,4 @@ ml python/3.9.0
 source /home/users/dtadres/.env_brainsss_david/bin/activate
 # ml antspy/0.2.2
 date
-python3 -u /home/users/dtadres/brainsss_david/scripts/stitch_split_nii.py
+python3 -u /home/users/dtadres/brainsss_david/scripts/1_stitch_split_nii.py

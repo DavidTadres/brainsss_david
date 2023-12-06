@@ -26,7 +26,7 @@ dates = ['20231130_old']  # must be a string
 
 folder_name_to_target = 'func' # All my folders with functional imaging are called func, e.g. 'func1', 'func2' etc.
 
-buggy_brukerbridge = True # early version of brukerbridge omitted one sequence (z-stack) per split file. Account for this
+buggy_brukerbridge = False # early version of brukerbridge omitted one sequence (z-stack) per split file. Account for this
 
 for current_date in dates:
     print('STARTING DATE:', str(current_date))
@@ -48,6 +48,9 @@ for current_date in dates:
                         full_brain_ch2 = []
                         channel_1_list = []
                         channel_2_list = []
+                        ch1_already_stitched = False
+                        ch2_already_stitched = False
+
                         for file in files:
                             ## stitch brain ##
                             # append all appropriate nii files together
@@ -59,6 +62,12 @@ for current_date in dates:
                                 channel_2_list.append(file)
                             elif "xml" in file and not "Voltage" in file:
                                 xml_file_name = file
+                            # Check if the stitched files already exist
+                            if 'ch1_stitched.nii' in file:
+                                ch1_already_stitched = True
+                            if 'ch2_stitched.nii' in file:
+                                ch2_already_stitched = True
+
 
                         # How many sequences does the microscope report on having have recorded
                         xml_file = ET.parse(Path(tseries_folder, xml_file_name)).getroot()
@@ -125,9 +134,8 @@ for current_date in dates:
                             gc.collect()  # extra delete from memory
                             time.sleep(30)  ##to give to time to delete
 
-
-                        if len(sorted_channel_1_list) > 0:
-                            print('loading split files for Ch1' )
+                        if len(sorted_channel_1_list) > 0 and not ch1_already_stitched:
+                            print('loading split files for Ch1 in ' + str(tseries_folder) )
                             nii_stitcher(x_resolution=x_resolution,
                                          y_resolution=y_resolution,
                                          frames_per_stack=frames_per_stack,
@@ -140,8 +148,8 @@ for current_date in dates:
 
                             print('CH1 COMPLETE for: ', str(tseries_folder))
 
-                        if len(sorted_channel_2_list)> 0:
-                            print('loading split files for Ch2' )
+                        if len(sorted_channel_2_list)> 0 and not ch2_already_stitched:
+                            print('loading split files for Ch2 in ' + str(tseries_folder) )
                             nii_stitcher(x_resolution=x_resolution,
                                          y_resolution=y_resolution,
                                          frames_per_stack=frames_per_stack,
