@@ -10,6 +10,7 @@ from lxml import etree, objectify
 from openpyxl import Workbook
 from openpyxl import load_workbook
 import brainsss
+import pathlib
 #import bigbadbrain as bbb
 #import dataflow as flow
 
@@ -148,7 +149,7 @@ def copy_fly(source_fly, destination_fly, printlog, user):
                 os.mkdir(imaging_destination)
                 copy_bruker_data(source_expt_folder, imaging_destination, 'func', printlog)
                 # Copt fictrac data based on timestamps
-                copy_fictrac(expt_folder, printlog, user)
+                copy_fictrac(expt_folder, printlog, user, source_expt_folder)
                 # Copy visual data based on timestamps, and create visual.json
                 copy_visual(expt_folder, printlog)
 
@@ -332,9 +333,10 @@ def copy_visual(destination_region, printlog):
     with open(os.path.join(visual_destination, 'visual.json'), 'w') as f:
         json.dump(unique_stimuli, f, indent=4)
 
-def copy_fictrac(destination_region, printlog, user):
+def copy_fictrac(destination_region, printlog, user, source_fly):
     #fictrac_folder = '/oak/stanford/groups/trc/data/Brezovec/2P_Imaging/imports/fictrac'
-
+    fictrac_destination = os.path.join(destination_region, 'fictrac')
+    os.mkdir(fictrac_destination)
     if user == 'brezovec':
         user = 'luke'
     if user == 'yandanw':
@@ -343,91 +345,109 @@ def copy_fictrac(destination_region, printlog, user):
         user = 'luke'
     if user == 'dtadres':
         fictrac_folder = "/oak/stanford/groups/trc/data/David/Bruker/Fictrac"
+        # when doing post-hoc fictrac, Bella's code where one compare the recording
+        # timestamps of imaging and fictrac doesn't work anymore.
+        # I instead use a deterministic file structure:
+        # for example for fly 20231201\fly2\func1 imaging data, fictrac data must
+        # be in the folder 20231201_fly2_func1. There must only be a single dat file in that folder.
+        source_path = os.path.join(fictrac_folder,
+                                   source_fly.split('/')[-3] + '_' + source_fly.split('/')[-2] +
+                                   '_' + source_fly.split('/')[-1])
+        # this would yield "20231201_fly2_func1" as the folder
+        # Find the dat file
+        for file in os.listdir(source_path):
+            if 'dat' in file:
+                width = 120
+                source_path = os.path.join(source_path, file)
+                target_path = os.path.join(fictrac_destination, file)
+                to_print = ('/').join(target_path.split('/')[-4:])
+                printlog(f'Transfering file{to_print:.>{width-16}}')
     else:
         fictrac_folder = os.path.join("/oak/stanford/groups/trc/data/fictrac",user)
-    fictrac_destination = os.path.join(destination_region, 'fictrac')
-
-    # Find time of experiment based on functional.xml
-    true_ymd, true_total_seconds = get_expt_time(os.path.join(destination_region,'imaging'))
-    #printlog(f'true_ymd: {true_ymd}; true_total_seconds: {true_total_seconds}')
-
-    # Find .dat file of 1) correct-ish time, 2) correct-ish size
-    correct_date_and_size = []
-    time_differences = []
-    for file in os.listdir(fictrac_folder):
-
-        # must be .dat file
-        if '.dat' not in file:
-            continue
-
-        # Get datetime from file name
-        datetime = file.split('-')[1][:-4]
-        test_ymd = datetime.split('_')[0]
-        test_time = datetime.split('_')[1]
-        test_hour = test_time[0:2]
-        test_minute = test_time[2:4]
-        test_second = test_time[4:6]
-        test_total_seconds = int(test_hour) * 60 * 60 + \
-                             int(test_minute) * 60 + \
-                             int(test_second)
-
-        # Year/month/day must be exact
-        if true_ymd != test_ymd:
-            continue
-        #printlog('Found file from same day: {}'.format(file))
-
-        # Must be correct size
-        fp = os.path.join(fictrac_folder, file)
-        file_size = os.path.getsize(fp)
-        if file_size < 1000000: #changed to 1MB to accomidate 1 min long recordings. #30000000: #30MB
-            #width = 120
-            #printlog(F"Found correct .dat file{file:.>{width-23}}")
-            #datetime_correct = datetime
-            #break
-            continue
-
-        # get time difference from expt
-        time_difference = np.abs(true_total_seconds - test_total_seconds)
-        # Time must be within 10min
-        if time_difference > 10 * 60:
-            continue
-
-        # if correct date and size append to list of potential file
-        correct_date_and_size.append(file)
-        time_differences.append(time_difference)
-
-    # now that we have all potential files, pick the one with closest time
-    # except clause will happen if empty list
-    try:
-        datetime_correct = correct_date_and_size[np.argmin(time_differences)]
-    except:
-        width = 120
-        printlog(F"{'   No fictrac data found --- continuing without fictrac data   ':*^{width}}")
-        return
-
-    # Collect all fictrac files with correct datetime
-    correct_time_files = [file for file in os.listdir(fictrac_folder) if datetime_correct in file]
-
-    # correct_time_files = []
-    # for file in os.listdir(fictrac_folder):
-    #     if datetime_correct in file:
-    #         correct_time_files.append(file)
 
 
-    #printlog('Found these files with correct times: {}'.format(correct_time_files))
-    ##sys.stdout.flush()
+        # Find time of experiment based on functional.xml
+        true_ymd, true_total_seconds = get_expt_time(os.path.join(destination_region,'imaging'))
+        #printlog(f'true_ymd: {true_ymd}; true_total_seconds: {true_total_seconds}')
 
-    # Now transfer these 4 files to the fly
-    os.mkdir(fictrac_destination)
-    for file in correct_time_files:
-        width=120
-        target_path = os.path.join(fictrac_destination, file)
-        source_path = os.path.join(fictrac_folder, file)
-        to_print = ('/').join(target_path.split('/')[-4:])
-        printlog(f'Transfering file{to_print:.>{width-16}}')
-        #printlog('Transfering {}'.format(target_path))
+        # Find .dat file of 1) correct-ish time, 2) correct-ish size
+        correct_date_and_size = []
+        time_differences = []
+        for file in os.listdir(fictrac_folder):
+
+            # must be .dat file
+            if '.dat' not in file:
+                continue
+
+            # Get datetime from file name
+            datetime = file.split('-')[1][:-4]
+            test_ymd = datetime.split('_')[0]
+            test_time = datetime.split('_')[1]
+            test_hour = test_time[0:2]
+            test_minute = test_time[2:4]
+            test_second = test_time[4:6]
+            test_total_seconds = int(test_hour) * 60 * 60 + \
+                                 int(test_minute) * 60 + \
+                                 int(test_second)
+
+            # Year/month/day must be exact
+            if true_ymd != test_ymd:
+                continue
+            #printlog('Found file from same day: {}'.format(file))
+
+            # Must be correct size
+            fp = os.path.join(fictrac_folder, file)
+            file_size = os.path.getsize(fp)
+            if file_size < 1000000: #changed to 1MB to accomidate 1 min long recordings. #30000000: #30MB
+                #width = 120
+                #printlog(F"Found correct .dat file{file:.>{width-23}}")
+                #datetime_correct = datetime
+                #break
+                continue
+
+            # get time difference from expt
+            time_difference = np.abs(true_total_seconds - test_total_seconds)
+            # Time must be within 10min
+            if time_difference > 10 * 60:
+                continue
+
+            # if correct date and size append to list of potential file
+            correct_date_and_size.append(file)
+            time_differences.append(time_difference)
+
+        # now that we have all potential files, pick the one with closest time
+        # except clause will happen if empty list
+        try:
+            datetime_correct = correct_date_and_size[np.argmin(time_differences)]
+        except:
+            width = 120
+            printlog(F"{'   No fictrac data found --- continuing without fictrac data   ':*^{width}}")
+            return
+
+        # Collect all fictrac files with correct datetime
+        correct_time_files = [file for file in os.listdir(fictrac_folder) if datetime_correct in file]
+
+        # correct_time_files = []
+        # for file in os.listdir(fictrac_folder):
+        #     if datetime_correct in file:
+        #         correct_time_files.append(file)
+
+
+        #printlog('Found these files with correct times: {}'.format(correct_time_files))
         ##sys.stdout.flush()
-        copyfile(source_path, target_path)
+
+        # Now transfer these 4 files to the fly
+        os.mkdir(fictrac_destination)
+        for file in correct_time_files:
+            width=120
+            target_path = os.path.join(fictrac_destination, file)
+            source_path = os.path.join(fictrac_folder, file)
+            to_print = ('/').join(target_path.split('/')[-4:])
+            printlog(f'Transfering file{to_print:.>{width-16}}')
+            #printlog('Transfering {}'.format(target_path))
+            ##sys.stdout.flush()
+
+    copyfile(source_path, target_path)
 
     ### Create empty xml file.
     # Update this later
