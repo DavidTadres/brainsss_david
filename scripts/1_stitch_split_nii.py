@@ -142,7 +142,7 @@ for current_date in dates:
                                              no_of_stacks=no_of_stacks,
                                              sorted_channel_list=sorted_channel_1_list,
                                              current_folder=tseries_folder,
-                                             savename='ch1_stitched.nii',# it is important this is saved as ch1 rather than channel so
+                                             savename='ch1_concat.nii',# it is important this is saved as ch1 rather than channel so
                                                 # it doesn't try to get restitched if the code runs twice
                                              )
 
@@ -161,7 +161,7 @@ for current_date in dates:
                                              no_of_stacks=no_of_stacks,
                                              sorted_channel_list=sorted_channel_2_list,
                                              current_folder=tseries_folder,
-                                             savename='ch2_stitched.nii',# it is important this is saved as ch1 rather than channel so
+                                             savename='ch2_concat.nii',# it is important this is saved as ch1 rather than channel so
                                                 # it doesn't try to get restitched if the code runs twice
                                              )
 
