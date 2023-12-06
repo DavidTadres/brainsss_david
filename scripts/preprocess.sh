@@ -6,6 +6,7 @@
 #SBATCH --cpus-per-task=1
 #SBATCH --output=./logs/mainlog.out
 #SBATCH --open-mode=append
+#SBATCH --mail-type=ALL
 
 while [[ $# -gt 0 ]]; do
   case $1 in
@@ -120,6 +121,8 @@ ARGS="{\"PWD\":\"$PWD\",\"BUILDFLIES\":\"$BUILDFLIES\",\"FLIES\":\"$FLIES\",\"DI
 \"ANAT2ATLAS\":\"$ANAT2ATLAS\",\"APPLY_TRANSFORMS\":\"$APPLY_TRANSFORMS\",\"GREY_ONLY\":\"$GREY_ONLY\",\
 \"NO_ZSCORE_HIGHPASS\":\"$NO_ZSCORE_HIGHPASS\",\"MAKE_SUPERVOXELS\":\"$MAKE_SUPERVOXELS\"}"
 
-ml python/3.6
+#ml python/3.6
+ml python/3.9.0
+source /home/users/dtadres/.env_brainsss_david/bin/activate
 date
 python3 -u ./preprocess.py $ARGS
