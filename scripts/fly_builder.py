@@ -82,16 +82,16 @@ def add_date_to_fly(destination_fly):
         # Get func folders
         func_folders = [os.path.join(destination_fly,x) for x in os.listdir(destination_fly) if 'func' in x]
         brainsss.sort_nicely(func_folders)
-        func_folder = func_folders[0]
+        func_folder = func_folders[0] # This throws an error if no func folder, hence try..except
         # Get full xml file path
-        xml_file = os.path.join(func_folder, 'imaging', 'functional.xml')
+        xml_file = os.path.join(func_folder, 'imaging', 'functional.xml') # Unsure how this leads to correct filename!
     except: # Use anatomy folder
         # Get anat folders
         anat_folders = [os.path.join(destination_fly,x) for x in os.listdir(destination_fly) if 'anat' in x]
         brainsss.sort_nicely(anat_folders)
         anat_folder = anat_folders[0]
         # Get full xml file path
-        xml_file = os.path.join(anat_folder, 'imaging', 'anatomy.xml')
+        xml_file = os.path.join(anat_folder, 'imaging', 'anatomy.xml') # Unsure how this leads to correct filename!
     # Extract datetime
     datetime_str,_,_ = get_datetime_from_xml(xml_file)
     # Get just date
@@ -184,6 +184,8 @@ def copy_bruker_data(source, destination, folder_type, printlog):
         if os.path.isdir(source_item):
             # Do not update destination - download all files into that destination
             copy_bruker_data(source_item, destination, folder_type, printlog)
+            # In my case this leads to /oak/stanford/groups/trc/data/David/Bruker/imports/20231201/fly2/func1
+            # The code then calls itself with this path which then goes one folder deeper
 
         # If the item is a file
         else:
@@ -192,9 +194,19 @@ def copy_bruker_data(source, destination, folder_type, printlog):
             if 'SingleImage' in item:
                 continue
             # Rename functional file to functional_channel_x.nii
-            if '.nii' in item and folder_type == 'func':
-                # '_' is from channel numbers my tiff to nii adds
-                item = 'functional_' + item.split('_')[1] + '_' + item.split('_')[2]
+            if 'concat.nii' in item and folder_type == 'func':
+                item = 'functional_channel_' + item.split('ch')[1].split('_')[0] + '.nii'
+            # item = "ch2_concat.nii"
+            # item = 'functional_channel_' + item.split('ch')[1].split('_')[0] + '.nii'
+            # -> functional_channel_2.nii
+            # Bella's code
+            # item = 'TSeries-12172018-1322-003_channel_2_s0.nii'
+            # item = 'functional_' + item.split('_')[1] + '_' + item.split('_')[2]
+            # -> 'functional_channel_2'
+            # if '.nii' in item and folder_type == 'func':
+            #    # '_' is from channel numbers my tiff to nii adds
+            #    item = 'functional_' + item.split('_')[1] + '_' + item.split('_')[2]
+            # Rename anatomy file to anatomy_channel_x.nii
             # Rename anatomy file to anatomy_channel_x.nii
             if '.nii' in item and folder_type == 'anat':
                 item = 'anatomy_' + item.split('_')[1] + '_' + item.split('_')[2]

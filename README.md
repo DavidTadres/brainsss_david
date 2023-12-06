@@ -91,9 +91,11 @@ There are currently three main ways to use this package:
               /fly_0
                    /func_0
                    /anat_0
+                   /fly.json 
               /fly_1
                   /func_0
                   /anat_0
+                  /fly.json 
           ```
 
       - This directory should be uploaded to your imports folder on Oak (probably via BrukerBridge), and set 

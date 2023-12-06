@@ -18,7 +18,8 @@ def main(args):
 
     width = 120 # width of print log
     nodes = 2 # 1 or 2
-    nice = True # true to lower priority of jobs. ie, other users jobs go first
+    nice = False # true to lower priority of jobs. ie, other users jobs go first # Set to True once troubleshooting
+    # is done
 
     #####################
     ### Setup logging ###
