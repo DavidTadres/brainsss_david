@@ -20,6 +20,7 @@ import os
 from pathlib import Path
 import natsort
 import xml.etree.ElementTree as ET
+import traceback
 
 # get to files
 dates = ['20231130__queue__']  # must be a string
@@ -99,10 +100,6 @@ for current_date in dates:
                         print('sorted_channel_1_list', sorted_channel_1_list)
                         print('sorted_channel_2_list', sorted_channel_2_list)
 
-                        ########
-                        # Channel 1
-                        ########
-
                         def nii_stitcher(x_resolution, y_resolution, frames_per_stack, no_of_stacks,
                                          sorted_channel_list, current_folder, savename):
                             # Preallocate empty numpy array
@@ -133,31 +130,41 @@ for current_date in dates:
                             del img  # to delete from memory
                             gc.collect()  # extra delete from memory
                             time.sleep(30)  ##to give to time to delete
-
+                        ########
+                        # Channel 1
+                        ########
                         if len(sorted_channel_1_list) > 0 and not ch1_already_stitched:
                             print('loading split files for Ch1 in ' + str(tseries_folder) )
-                            nii_stitcher(x_resolution=x_resolution,
-                                         y_resolution=y_resolution,
-                                         frames_per_stack=frames_per_stack,
-                                         no_of_stacks=no_of_stacks,
-                                         sorted_channel_list=sorted_channel_1_list,
-                                         current_folder=tseries_folder,
-                                         savename='ch1_stitched.nii',# it is important this is saved as ch1 rather than channel so
-                                            # it doesn't try to get restitched if the code runs twice
-                                         )
+                            try:
+                                nii_stitcher(x_resolution=x_resolution,
+                                             y_resolution=y_resolution,
+                                             frames_per_stack=frames_per_stack,
+                                             no_of_stacks=no_of_stacks,
+                                             sorted_channel_list=sorted_channel_1_list,
+                                             current_folder=tseries_folder,
+                                             savename='ch1_stitched.nii',# it is important this is saved as ch1 rather than channel so
+                                                # it doesn't try to get restitched if the code runs twice
+                                             )
 
-                            print('CH1 COMPLETE for: ', str(tseries_folder))
-
+                                print('CH1 COMPLETE for: ', str(tseries_folder))
+                            except Exception:
+                                traceback.print_exc()
+                        ########
+                        # Channel 2
+                        ########
                         if len(sorted_channel_2_list)> 0 and not ch2_already_stitched:
                             print('loading split files for Ch2 in ' + str(tseries_folder) )
-                            nii_stitcher(x_resolution=x_resolution,
-                                         y_resolution=y_resolution,
-                                         frames_per_stack=frames_per_stack,
-                                         no_of_stacks=no_of_stacks,
-                                         sorted_channel_list=sorted_channel_2_list,
-                                         current_folder=tseries_folder,
-                                         savename='ch2_stitched.nii',# it is important this is saved as ch1 rather than channel so
-                                            # it doesn't try to get restitched if the code runs twice
-                                         )
+                            try:
+                                nii_stitcher(x_resolution=x_resolution,
+                                             y_resolution=y_resolution,
+                                             frames_per_stack=frames_per_stack,
+                                             no_of_stacks=no_of_stacks,
+                                             sorted_channel_list=sorted_channel_2_list,
+                                             current_folder=tseries_folder,
+                                             savename='ch2_stitched.nii',# it is important this is saved as ch1 rather than channel so
+                                                # it doesn't try to get restitched if the code runs twice
+                                             )
 
-                            print('CH2 COMPLETE for: ', str(tseries_folder))
+                                print('CH2 COMPLETE for: ', str(tseries_folder))
+                            except Exception:
+                                traceback.print_exc()
