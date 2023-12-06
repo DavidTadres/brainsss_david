@@ -199,6 +199,8 @@ def copy_bruker_data(source, destination, folder_type, printlog):
             # item = "ch2_concat.nii"
             # item = 'functional_channel_' + item.split('ch')[1].split('_')[0] + '.nii'
             # -> functional_channel_2.nii
+            if '.nii' in item and folder_type == 'func':
+                continue # do not copy!! Else we'll copy all the split nii files as well.
             # Bella's code
             # item = 'TSeries-12172018-1322-003_channel_2_s0.nii'
             # item = 'functional_' + item.split('_')[1] + '_' + item.split('_')[2]
@@ -339,7 +341,10 @@ def copy_fictrac(destination_region, printlog, user):
         user = 'luke'
     if user == 'ilanazs':
         user = 'luke'
-    fictrac_folder = os.path.join("/oak/stanford/groups/trc/data/fictrac",user)
+    if user == 'dtadres':
+        fictrac_folder = "/oak/stanford/groups/trc/data/David/Bruker/Fictrac"
+    else:
+        fictrac_folder = os.path.join("/oak/stanford/groups/trc/data/fictrac",user)
     fictrac_destination = os.path.join(destination_region, 'fictrac')
 
     # Find time of experiment based on functional.xml
