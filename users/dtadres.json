@@ -1,7 +1,6 @@
 {
     "imports_path": "/oak/stanford/groups/trc/data/David/Bruker/imports",
     "dataset_path": "/oak/stanford/groups/trc/data/David/Bruker/preprocessed",
-    "copy_data": "False",
     "fictrac_qc": "False",
     "stim_triggered_beh": "False",
     "bleaching_qc": "True",

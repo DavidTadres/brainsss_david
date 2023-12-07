@@ -22,7 +22,6 @@ def main(args):
     target_path = args['dataset_path']
     fly_dirs = args['fly_dirs']
     user = args['user']
-    copy_data = args['copy_data']
     printlog = getattr(brainsss.Printlog(logfile=logfile), 'print_to_log')
     #printlog('\nBuilding flies from directory {}'.format(flagged_dir))
     width = 120
@@ -66,7 +65,7 @@ def main(args):
             printlog(F'Created fly directory:{destination_fly:.>{width-22}}')
 
             # Copy fly data
-            copy_fly(source_fly, destination_fly, printlog, user, copy_data)
+            copy_fly(source_fly, destination_fly, printlog, user)
 
             # Add date to fly.json file
             try:
@@ -110,7 +109,7 @@ def add_date_to_fly(destination_fly):
         json.dump(metadata, f, indent=4)
         f.truncate()
 
-def copy_fly(source_fly, destination_fly, printlog, user, copy_data):
+def copy_fly(source_fly, destination_fly, printlog, user):
 
     ''' There will be two types of folders in a fly folder.
     1) func_x folder
@@ -140,7 +139,7 @@ def copy_fly(source_fly, destination_fly, printlog, user, copy_data):
                 # Make imaging folder and copy
                 imaging_destination = os.path.join(expt_folder, 'imaging')
                 os.mkdir(imaging_destination)
-                copy_bruker_data(source_expt_folder, imaging_destination, 'anat', printlog, copy_data)
+                copy_bruker_data(source_expt_folder, imaging_destination, 'anat', printlog)
                 ######################################################################
                 print(f"anat:{expt_folder}") # IMPORTANT - FOR COMMUNICATING WITH MAIN
                 ######################################################################
@@ -148,7 +147,7 @@ def copy_fly(source_fly, destination_fly, printlog, user, copy_data):
                 # Make imaging folder and copy
                 imaging_destination = os.path.join(expt_folder, 'imaging')
                 os.mkdir(imaging_destination)
-                copy_bruker_data(source_expt_folder, imaging_destination, 'func', printlog, copy_data)
+                copy_bruker_data(source_expt_folder, imaging_destination, 'func', printlog)
                 # Copt fictrac data based on timestamps
                 copy_fictrac(expt_folder, printlog, user, source_expt_folder)
                 # Copy visual data based on timestamps, and create visual.json
@@ -176,7 +175,7 @@ def copy_fly(source_fly, destination_fly, printlog, user, copy_data):
                 printlog('Invalid file in fly folder (skipping): {}'.format(item))
                 ##sys.stdout.flush()
 
-def copy_bruker_data(source, destination, folder_type, printlog, copy_data):
+def copy_bruker_data(source, destination, folder_type, printlog):
     # Do not update destination - download all files into that destination
     for item in os.listdir(source):
         # Create full path to item
@@ -256,10 +255,7 @@ def copy_bruker_data(source, destination, folder_type, printlog, copy_data):
 
             # Actually copy the file
             target_item = os.path.join(destination, item)
-            if copy_data:
-                copy_file(source_item, target_item, printlog)
-            else:
-                pass
+            copy_file(source_item, target_item, printlog)
 
 def copy_file(source, target, printlog):
     #printlog('Transfering file {}'.format(target))
