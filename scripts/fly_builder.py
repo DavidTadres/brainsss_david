@@ -212,7 +212,7 @@ def copy_bruker_data(source, destination, folder_type, printlog):
             # Rename anatomy file to anatomy_channel_x.nii
             # Rename anatomy file to anatomy_channel_x.nii
             if '.nii' in item and folder_type == 'anat':
-                item = 'anatomy_' + item.split('_')[1] + '_' + item.split('_')[2]
+                item = 'anatomy_' + item.split('_')[1] + '_' + item.split('_')[2] + '.nii'
             # Special copy for photodiode since it goes in visual folder
             if '.csv' in item:
                 item = 'photodiode.csv'
