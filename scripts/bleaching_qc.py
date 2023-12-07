@@ -28,7 +28,7 @@ def main(args):
     for file in files:
         full_file = os.path.join(directory, file + '.nii')
         if os.path.exists(full_file):
-            brain = np.asarray(nib.load(full_file).get_data(), dtype='uint16')
+            brain = np.asarray(nib.load(full_file).get_fdata(), dtype='uint16')
             data_mean[file] = np.mean(brain,axis=(0,1,2))
         else:
             printlog(F"Not found (skipping){file:.>{width-20}}")

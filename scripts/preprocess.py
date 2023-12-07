@@ -54,6 +54,7 @@ def main(args):
     imports_path = settings['imports_path']
     dataset_path = settings['dataset_path']
     if build_flies:
+        copy_data = brainsss.parse_true_false(settings.get('copy_data',False))
         fictrac_qc = brainsss.parse_true_false(settings.get('fictrac_qc',False))
         stim_triggered_beh = brainsss.parse_true_false(settings.get('stim_triggered_beh',False))
         bleaching_qc = brainsss.parse_true_false(settings.get('bleaching_qc',False))
@@ -74,6 +75,7 @@ def main(args):
         no_zscore_highpass = brainsss.parse_true_false(settings.get('no_zscore_highpass', False))
         make_supervoxels = brainsss.parse_true_false(settings.get('make_supervoxels', False))
     else:
+        copy_data = False
         fictrac_qc = False
         stim_triggered_beh = False
         bleaching_qc = False
@@ -195,7 +197,7 @@ def main(args):
         ###################
 
         flagged_dir = os.path.join(imports_path, dir_to_build)
-        args = {'logfile': logfile, 'flagged_dir': flagged_dir, 'dataset_path': dataset_path, 'fly_dirs': fly_dirs, 'user': user}
+        args = {'logfile': logfile, 'flagged_dir': flagged_dir, 'dataset_path': dataset_path, 'fly_dirs': fly_dirs, 'user': user, 'copy_data': copy_data}
         script = 'fly_builder.py'
         job_id = brainsss.sbatch(jobname='bldfly',
                              script=os.path.join(scripts_path, script),
