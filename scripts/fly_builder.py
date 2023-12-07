@@ -200,7 +200,7 @@ def copy_bruker_data(source, destination, folder_type, printlog):
             # item = "ch2_concat.nii"
             # item = 'functional_channel_' + item.split('ch')[1].split('_')[0] + '.nii'
             # -> functional_channel_2.nii
-            elif '.nii' in item and folder_type == 'func':
+            if '.nii' in item and folder_type == 'func':
                 continue # do not copy!! Else we'll copy all the split nii files as well.
             # Bella's code
             # item = 'TSeries-12172018-1322-003_channel_2_s0.nii'
