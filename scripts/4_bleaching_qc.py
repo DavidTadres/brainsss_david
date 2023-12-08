@@ -42,6 +42,7 @@ def main(args):
 
     funcs = []
     anats = []
+    print(fly_dirs)
     for fly_dir in fly_dirs:
         fly_directory = os.path.join(dataset_path, fly_dir)
         if dirtype == 'func' or dirtype == None:
