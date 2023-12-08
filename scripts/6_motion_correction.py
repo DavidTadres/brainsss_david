@@ -16,14 +16,46 @@ from time import strftime
 from time import sleep
 
 def main(args):
-	# REQUIRED args
-	dataset_path = args['directory']
-	brain_master = args['brain_master']
 
-	# OPTIONAL brain_mirror
-	brain_mirror = args.get('brain_mirror', None)
+	standalone = True  # I'll add if statements to be able to go back to Bella's script easliy
+
+	"""
+	# copy from preprocess.py
+	directory = os.path.join(funcanat, 'imaging')
+	if dirtype == 'func':
+		brain_master = 'functional_channel_1.nii'
+		brain_mirror = 'functional_channel_2.nii'
+	if dirtype == 'anat':
+		brain_master = 'anatomy_channel_1.nii'
+		brain_mirror = 'anatomy_channel_2.nii'
+		args = {'logfile': logfile,
+			'directory': directory,
+			'brain_master': brain_master,
+			'brain_mirror': brain_mirror,
+			'scantype': dirtype}
+			
+	global_resources = True
+	dur = 48
+	mem = 8
+	"""
+	# REQUIRED args
+	if standalone:
+		dataset_path = '/oak/stanford/groups/trc/data/David/Bruker/preprocessed/fly_001/func1/imaging'
+		if 'func' in directory:
+			brain_master = 'functional_channel_1.nii'
+			brain_mirror = 'functional_channel_2.nii'
+		elif 'anat' in directory:
+			brain_master = 'anatomy_channel_1.nii'
+			brain_mirror = 'anatomy_channel_2.nii'
+
+	else:
+		dataset_path = args['directory']  # directory will be a full path to either an anat/imaging folder or a func/imaging folder
+		# OPTIONAL brain_mirror
+		brain_mirror = args.get('brain_mirror', None)
+
 
 	# OPTIONAL PARAMETERS
+	# Unsure how to use those - lets see if it throws an error.
 	type_of_transform = args.get('type_of_transform', 'SyN')  # For ants.registration(), see ANTsPy docs | Default 'SyN'
 	output_format = args.get('output_format', 'h5')  #  Save format for registered image data | Default h5. Also allowed: 'nii'
 	assert output_format in ['h5', 'nii'], 'OPTIONAL PARAM output_format MUST BE ONE OF: "h5", "nii"'

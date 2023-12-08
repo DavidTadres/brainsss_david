@@ -338,7 +338,7 @@ def main(args):
                     'brain_mirror': brain_mirror,
                     'scantype': dirtype}
 
-            script = 'motion_correction.py'
+            script = '6_motion_correction.py'
             # if global_resources:
             #     dur = 48
             #     mem = 8
