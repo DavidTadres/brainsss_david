@@ -33,4 +33,4 @@ ml python/3.9.0
 source /home/users/dtadres/.env_brainsss_david/bin/activate
 # ml antspy/0.2.2
 date
-python3 -u ./55_make_mean_brain.py $ARGS
+python3 -u ./5_make_mean_brain.py $ARGS
