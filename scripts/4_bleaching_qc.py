@@ -57,7 +57,7 @@ def main(args):
 
     #logfile = args['logfile']
     if standalone:
-        directory = '/Volumes/groups/trc/data/David/Bruker/preprocessed/fly_001/func1'
+        directory = '/Volumes/groups/trc/data/David/Bruker/preprocessed/fly_001/func1/imaging'
     else:
         directory = args['directory'] # directory will be a full path to either an anat/imaging folder or a func/imaging folder
     #dirtype = args['dirtype']
