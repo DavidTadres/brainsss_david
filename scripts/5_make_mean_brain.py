@@ -38,7 +38,7 @@ def main(args):
         files = []
         for current_file in pathlib.Path(directory).iterdir():
             if 'anatomy_channel' in current_file.name or 'functional_channel' in current_file.name:
-                files.append(current_file)
+                files.append(current_file.name)
 
         """
         # Copy from preprocess.py
