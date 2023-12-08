@@ -11,7 +11,7 @@ import nibabel as nib
 def main(args):
     # args = {'logfile': logfile, 'directory': directory, 'dirtype': dirtype}
 
-    standalone = True  # i'll add if statements to be able to go back to Bella's script easliy
+    standalone = True  # I'll add if statements to be able to go back to Bella's script easliy
 
     if standalone:
         #new logfile
@@ -112,5 +112,5 @@ def main(args):
     save_file = os.path.join(directory, 'bleaching.png')
     plt.savefig(save_file,dpi=300,bbox_inches='tight')
 
-if __name__ == '__main__':
-    main(json.loads(sys.argv[1]))
+#if __name__ == '__main__':
+#    main(json.loads(sys.argv[1]))
