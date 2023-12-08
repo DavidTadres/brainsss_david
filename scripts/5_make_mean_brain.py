@@ -37,7 +37,8 @@ def main(args):
 
         files = []
         for current_file in pathlib.Path(directory).iterdir():
-            if 'anatomy_channel' in current_file.name or 'functional_channel' in current_file.name:
+            if 'anatomy_channel' in current_file.name or 'functional_channel' in current_file.name \
+                    and not 'mean' in current_file.name: # this last one is necessary so that if script is run twice, mean is still calculated only once
                 files.append(current_file.name)
 
         """
