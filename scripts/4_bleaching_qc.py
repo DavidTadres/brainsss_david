@@ -112,5 +112,5 @@ def main(args):
     save_file = os.path.join(directory, 'bleaching.png')
     plt.savefig(save_file,dpi=300,bbox_inches='tight')
 
-#if __name__ == '__main__':
-#    main(json.loads(sys.argv[1]))
+if __name__ == '__main__':
+    main(json.loads(sys.argv[1]))
