@@ -52,12 +52,15 @@ def main(args):
 
     brainsss.sort_nicely(funcs)
     brainsss.sort_nicely(anats)
-    funcanats = funcs + anats
+    funcanats = funcs + anats # ? what's that thing doing here?
     dirtypes = ['func']*len(funcs) + ['anat']*len(anats)
 
     #logfile = args['logfile']
-    directory = args['directory'] # directory will be a full path to either an anat/imaging folder or a func/imaging folder
-    dirtype = args['dirtype']
+    if standalone:
+        directory = '/Volumes/groups/trc/data/David/Bruker/preprocessed/fly_001/func1'
+    else:
+        directory = args['directory'] # directory will be a full path to either an anat/imaging folder or a func/imaging folder
+    #dirtype = args['dirtype']
     width = 120
     printlog = getattr(brainsss.Printlog(logfile=logfile), 'print_to_log')
 
