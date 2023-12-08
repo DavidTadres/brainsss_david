@@ -163,7 +163,7 @@ def main(args):
 
 	### Get Brain Shape ###
 	img_ch1 = nib.load(filepath_brain_master) # this loads a proxy
-	ch1_shape = img_ch1.header.get_data_shape()
+	ch1_shape = img_ch1.header.get_fdata().shape
 	brain_dims = ch1_shape
 	printlog(F"Master brain shape{str(brain_dims):.>{width-18}}")
 
@@ -207,7 +207,7 @@ def main(args):
 	if brain_mirror is not None:
 		img_ch2 = nib.load(filepath_brain_mirror) # this loads a proxy
 		# make sure channel 1 and 2 have same shape
-		ch2_shape = img_ch2.header.get_data_shape()
+		ch2_shape = img_ch2.header.get_fdata().shape
 		if ch1_shape != ch2_shape:
 			printlog(F"{'   WARNING Channel 1 and 2 do not have the same shape!   ':*^{width}}")
 			printlog("{} and {}".format(ch1_shape, ch2_shape))
