@@ -233,7 +233,7 @@ def main(args):
             directory = os.path.join(func, 'fictrac')
             if os.path.exists(directory):
                 args = {'logfile': logfile, 'directory': directory, 'fps': 100}
-                script = 'fictrac_qc.py'
+                script = '3_fictrac_qc.py'
                 job_id = brainsss.sbatch(jobname='fictracqc',
                                      script=os.path.join(scripts_path, script),
                                      modules=modules,
@@ -285,7 +285,7 @@ def main(args):
         for funcanat, dirtype in zip(funcanats, dirtypes):
             directory = os.path.join(funcanat, 'imaging')
             args = {'logfile': logfile, 'directory': directory, 'dirtype': dirtype}
-            script = 'bleaching_qc.py'
+            script = '4_bleaching_qc.py'
             job_id = brainsss.sbatch(jobname='bleachqc',
                                  script=os.path.join(scripts_path, script),
                                  modules=modules,

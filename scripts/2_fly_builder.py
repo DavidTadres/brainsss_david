@@ -17,31 +17,35 @@ import pathlib
 def main(args):
     ### Move folders from imports to fly dataset - need to restructure folders ###
 
-    # Copied stuff from preprocess
-    import time
-    width = 120  # width of print log
-    logfile = './logs/' + time.strftime("%Y%m%d-%H%M%S") + '.txt'
-    printlog = getattr(brainsss.Printlog(logfile=logfile), 'print_to_log')
-    sys.stderr = brainsss.Logger_stderr_sherlock(logfile)
-    brainsss.print_title(logfile, width)
+    standalone = True # i'll add if statements to be able to go back to Bella's script easliy
 
-    scripts_path = args['PWD']
-    com_path = os.path.join(scripts_path, 'com')
-    user = scripts_path.split('/')[3]
-    settings = brainsss.load_user_settings(user, scripts_path)
+    if standalone:
+        # Copied stuff from preprocess
+        import time
+        width = 120  # width of print log
+        logfile = './logs/' + time.strftime("%Y%m%d-%H%M%S") + '.txt'
+        printlog = getattr(brainsss.Printlog(logfile=logfile), 'print_to_log')
+        sys.stderr = brainsss.Logger_stderr_sherlock(logfile)
+        brainsss.print_title(logfile, width)
 
-    ### Parse user settings
-    imports_path = settings['imports_path']
-    dataset_path = settings['dataset_path']
-    target_path = dataset_path # to be consistent with this script.
+        scripts_path = args['PWD']
+        com_path = os.path.join(scripts_path, 'com')
+        user = scripts_path.split('/')[3]
+        settings = brainsss.load_user_settings(user, scripts_path)
 
-    dir_to_build = args['BUILDFLIES']
-    flagged_dir = os.path.join(imports_path, dir_to_build)
+        ### Parse user settings
+        imports_path = settings['imports_path']
+        dataset_path = settings['dataset_path']
+        target_path = dataset_path # to be consistent with this script.
 
-    # original args
-    #logfile = args['logfile']
-    #flagged_dir = args['flagged_dir']
-    #target_path = args['dataset_path']
+        dir_to_build = args['BUILDFLIES']
+        flagged_dir = os.path.join(imports_path, dir_to_build)
+
+    else:
+        # original args
+        logfile = args['logfile']
+        flagged_dir = args['flagged_dir']
+        target_path = args['dataset_path']
     ### Parse remaining command line args
     if args['FLIES'] == '':
         #printlog('no flies specified')

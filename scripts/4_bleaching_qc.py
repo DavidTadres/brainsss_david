@@ -9,8 +9,52 @@ import brainsss
 import nibabel as nib
 
 def main(args):
+    # args = {'logfile': logfile, 'directory': directory, 'dirtype': dirtype}
 
-    logfile = args['logfile']
+    standalone = True  # i'll add if statements to be able to go back to Bella's script easliy
+
+    if standalone:
+        #new logfile
+        import time
+        width = 120  # width of print log
+        logfile = './logs/' + time.strftime("%Y%m%d-%H%M%S") + '.txt'
+        printlog = getattr(brainsss.Printlog(logfile=logfile), 'print_to_log')
+        sys.stderr = brainsss.Logger_stderr_sherlock(logfile)
+        brainsss.print_title(logfile, width)
+
+        # get path!
+        scripts_path = args['PWD']
+        com_path = os.path.join(scripts_path, 'com')
+        user = scripts_path.split('/')[3]
+        settings = brainsss.load_user_settings(user, scripts_path)
+
+        ### Parse user settings
+        imports_path = settings['imports_path']
+        dataset_path = settings['dataset_path']
+
+        dirtype = 'func' # 'func' or 'anat'
+
+    if args['FLIES'] == '':
+        #printlog('no flies specified')
+        fly_dirs = None
+    else:
+        fly_dirs = args['FLIES'].split(',')
+
+    funcs = []
+    anats = []
+    for fly_dir in fly_dirs:
+        fly_directory = os.path.join(dataset_path, fly_dir)
+        if dirtype == 'func' or dirtype == None:
+            funcs.extend([os.path.join(fly_directory, x) for x in os.listdir(fly_directory) if 'func' in x])
+        if dirtype == 'anat' or dirtype == None:
+            anats.extend([os.path.join(fly_directory, x) for x in os.listdir(fly_directory) if 'anat' in x])
+
+    brainsss.sort_nicely(funcs)
+    brainsss.sort_nicely(anats)
+    funcanats = funcs + anats
+    dirtypes = ['func']*len(funcs) + ['anat']*len(anats)
+
+    #logfile = args['logfile']
     directory = args['directory'] # directory will be a full path to either an anat/imaging folder or a func/imaging folder
     dirtype = args['dirtype']
     width = 120
