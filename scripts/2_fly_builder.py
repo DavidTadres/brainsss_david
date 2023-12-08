@@ -17,11 +17,39 @@ import pathlib
 def main(args):
     ### Move folders from imports to fly dataset - need to restructure folders ###
 
-    logfile = args['logfile']
-    flagged_dir = args['flagged_dir']
-    target_path = args['dataset_path']
-    fly_dirs = args['fly_dirs']
-    user = args['user']
+    # Copied stuff from preprocess
+    import time
+    width = 120  # width of print log
+    logfile = './logs/' + time.strftime("%Y%m%d-%H%M%S") + '.txt'
+    printlog = getattr(brainsss.Printlog(logfile=logfile), 'print_to_log')
+    sys.stderr = brainsss.Logger_stderr_sherlock(logfile)
+    brainsss.print_title(logfile, width)
+
+    scripts_path = args['PWD']
+    com_path = os.path.join(scripts_path, 'com')
+    user = scripts_path.split('/')[3]
+    settings = brainsss.load_user_settings(user, scripts_path)
+
+    ### Parse user settings
+    imports_path = settings['imports_path']
+    dataset_path = settings['dataset_path']
+    target_path = dataset_path # to be consistent with this script.
+
+    dir_to_build = args['BUILDFLIES']
+    flagged_dir = os.path.join(imports_path, dir_to_build)
+
+    # original args
+    #logfile = args['logfile']
+    #flagged_dir = args['flagged_dir']
+    #target_path = args['dataset_path']
+    ### Parse remaining command line args
+    if args['FLIES'] == '':
+        #printlog('no flies specified')
+        fly_dirs = None
+    else:
+        fly_dirs = args['FLIES'].split(',')
+    #fly_dirs = args['fly_dirs']
+    #user = args['user']
     printlog = getattr(brainsss.Printlog(logfile=logfile), 'print_to_log')
     #printlog('\nBuilding flies from directory {}'.format(flagged_dir))
     width = 120
@@ -555,7 +583,7 @@ def get_expt_time(directory):
     ##sys.stdout.flush()
     return true_ymd, true_total_seconds
 
-def get_fly_time(fly_folder):
+"""def get_fly_time(fly_folder):
     # need to read all xml files and pick oldest time
     # find all xml files
     xml_files = []
@@ -578,9 +606,9 @@ def get_fly_time(fly_folder):
     datetime = datetimes_str[index_min]
     ##print('Found oldest datetime: {}'.format(datetime))
     ##sys.stdout.flush()
-    return datetime
+    return datetime"""
 
-def get_xml_files(fly_folder, xml_files):
+"""def get_xml_files(fly_folder, xml_files):
     # Look at items in fly folder
     for item in os.listdir(fly_folder):
         full_path = os.path.join(fly_folder, item)
@@ -595,7 +623,7 @@ def get_xml_files(fly_folder, xml_files):
                 xml_files.append(full_path)
                 ##print('Found xml file: {}'.format(full_path))
                 ##sys.stdout.flush()
-    return xml_files
+    return xml_files"""
 
 def get_datetime_from_xml(xml_file):
     ##print('Getting datetime from {}'.format(xml_file))
@@ -692,7 +720,7 @@ def add_fly_to_xlsx(fly_folder, printlog):
 
     ### TRY TO LOAD ELSX ###
     try:
-        xlsx_path = '/oak/stanford/groups/trc/data/Brezovec/2P_Imaging/20190101_walking_dataset/master_2P.xlsx'
+        xlsx_path = '/oak/stanford/groups/trc/data/David/Bruker/preprocessed/master_2P.xlsx'
         wb = load_workbook(filename=xlsx_path, read_only=False)
         ws = wb.active
         printlog("Sucessfully opened master_2P log")
@@ -774,7 +802,7 @@ def add_fly_to_xlsx(fly_folder, printlog):
         # Append the new row
         new_row = []
         new_row = [int(fly_id),
-                   int(expt_id),
+                   str(expt_id),
                    fly_data['date'],
                    expt_data['brain_area'],
                    fly_data['genotype'],

@@ -54,6 +54,11 @@ Log onto sherlock (ssh sunetid@login.sherlock.stanford.edu)
 #> python3 setup.py install
 ```
 
+To run c++ code
+```shell
+pip install cppimport
+```
+
 Note - to uninstall the virtualenvironment just do:
 ```shell
 > source venv/bin/activate
