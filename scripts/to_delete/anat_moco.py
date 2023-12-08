@@ -59,7 +59,7 @@ for fly in flies:
     directory = os.path.join(dataset_path, fly)
     files = ['anatomy_channel_1', 'anatomy_channel_2']
     args = {'logfile': logfile, 'directory': directory, 'files': files}
-    script = 'make_mean_brain.py'
+    script = '5_make_mean_brain.py'
     job_id = brainsss.sbatch(jobname='meanbrn',
                          script=os.path.join(scripts_path, script),
                          modules=modules,
@@ -139,7 +139,7 @@ for fly in flies:
     directory = moco_dir
     files = ['stitched_brain_green', 'stitched_brain_red']
     args = {'logfile': logfile, 'directory': directory, 'files': files}
-    script = 'make_mean_brain.py'
+    script = '5_make_mean_brain.py'
     job_id = brainsss.sbatch(jobname='meanbrn',
                          script=os.path.join(scripts_path, script),
                          modules=modules,

@@ -308,7 +308,7 @@ def main(args):
                 files = ['anatomy_channel_1.nii', 'anatomy_channel_2.nii']
 
             args = {'logfile': logfile, 'directory': directory, 'files': files}
-            script = 'make_mean_brain.py'
+            script = '5_make_mean_brain.py'
             job_id = brainsss.sbatch(jobname='meanbrn',
                                  script=os.path.join(scripts_path, script),
                                  modules=modules,
@@ -480,7 +480,7 @@ def main(args):
                 files = ['anatomy_channel_1_moco.h5', 'anatomy_channel_2_moco.h5']
 
             args = {'logfile': logfile, 'directory': directory, 'files': files}
-            script = 'make_mean_brain.py'
+            script = '5_make_mean_brain.py'
             job_id = brainsss.sbatch(jobname='meanbrn',
                                  script=os.path.join(scripts_path, script),
                                  modules=modules,

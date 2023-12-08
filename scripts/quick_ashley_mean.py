@@ -36,7 +36,7 @@ directory = '/oak/stanford/groups/trc/data/Ashley2/imports/20210802/fly3_20s-014
 files = ['MOCO_ch2.h5']
 
 args = {'logfile': logfile, 'directory': directory, 'files': files}
-script = 'make_mean_brain.py'
+script = '5_make_mean_brain.py'
 job_id = brainsss.sbatch(jobname='meanbrn',
                      script=os.path.join(scripts_path, script),
                      modules=modules,

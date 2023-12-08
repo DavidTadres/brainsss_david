@@ -140,7 +140,7 @@ for job_id in job_ids:
 # for fly in flies:
 #     directory = os.path.join(dataset_path, fly)
 #     args = {'logfile': logfile, 'directory': directory, 'files': files}
-#     script = 'make_mean_brain.py'
+#     script = '5_make_mean_brain.py'
 #     job_id = brainsss.sbatch(jobname='meanbrn',
 #                          script=os.path.join(scripts_path, script),
 #                          modules=modules,

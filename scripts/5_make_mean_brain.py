@@ -7,12 +7,55 @@ import brainsss
 import numpy as np
 import nibabel as nib
 import h5py
+import pathlib
 
 def main(args):
 
-    logfile = args['logfile']
-    directory = args['directory'] # directory will be a full path to either an anat/imaging folder or a func/imaging folder
-    files = args['files']
+    standalone = True  # I'll add if statements to be able to go back to Bella's script easliy
+    # args = {'logfile': logfile, 'directory': directory, 'files': files}
+
+    if standalone:
+        #new logfile
+        import time
+        width = 120  # width of print log
+        logfile = './logs/' + time.strftime("%Y%m%d-%H%M%S") + '.txt'
+        printlog = getattr(brainsss.Printlog(logfile=logfile), 'print_to_log')
+        sys.stderr = brainsss.Logger_stderr_sherlock(logfile)
+        brainsss.print_title(logfile, width)
+
+        # get path!
+        scripts_path = args['PWD']
+        com_path = os.path.join(scripts_path, 'com')
+        user = scripts_path.split('/')[3]
+        settings = brainsss.load_user_settings(user, scripts_path)
+
+        ### Parse user settings
+        imports_path = settings['imports_path']
+        dataset_path = settings['dataset_path']
+
+        directory = '/oak/stanford/groups/trc/data/David/Bruker/preprocessed/fly_001/func1/imaging'
+
+        files = []
+        for current_file in pathlib.Path(directory).iterdir():
+            if 'anatomy_channel' in current_file.name or 'functional_channel' in current_file.name:
+                files.append(current_file)
+
+        """
+        # Copy from preprocess.py
+        for funcanat, dirtype in zip(funcanats, dirtypes):
+            directory = os.path.join(funcanat, 'imaging')
+
+            if dirtype == 'func':
+                files = ['functional_channel_1.nii', 'functional_channel_2.nii']
+            if dirtype == 'anat':
+                files = ['anatomy_channel_1.nii', 'anatomy_channel_2.nii']
+            """
+    else:
+        logfile = args['logfile']
+        directory = args['directory'] # directory will be a full path to either an anat/imaging folder or a func/imaging folder
+        files = args['files']
+
+
     meanbrain_n_frames = args.get('meanbrain_n_frames', None)  # First n frames to average over when computing mean/fixed brain | Default None (average over all frames)
     width = 120
     printlog = getattr(brainsss.Printlog(logfile=logfile), 'print_to_log')
@@ -21,14 +64,12 @@ def main(args):
     if type(files) is str:
         files = [files]
 
-    
-
     for file in files:
         try:
             ### make mean ###
             full_path = os.path.join(directory, file)
             if full_path.endswith('.nii'):
-                brain = np.asarray(nib.load(full_path).get_data(), dtype='uint16')
+                brain = np.asarray(nib.load(full_path).get_fdata(), dtype='uint16')
             elif full_path.endswith('.h5'):
                 with h5py.File(full_path, 'r') as hf:
                     brain = np.asarray(hf['data'][:], dtype='uint16')
