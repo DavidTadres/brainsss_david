@@ -8,19 +8,6 @@
 #SBATCH --open-mode=append
 #SBATCH --mail-type=ALL
 
-flagged_dir = os.path.join(imports_path, dir_to_build)
-        args = {'logfile': logfile, 'flagged_dir': flagged_dir, 'dataset_path': dataset_path, 'fly_dirs': fly_dirs, 'user': user}
-        script = '2_fly_builder.py'
-        job_id = brainsss.sbatch(jobname='bldfly',
-                             script=os.path.join(scripts_path, script),
-                             modules=modules,
-                             args=args,
-                             logfile=logfile, time=3, mem=1, nice=nice, nodes=nodes)
-        func_and_anats = brainsss.wait_for_job(job_id, logfile, com_path)
-        func_and_anats = func_and_anats.split('\n')[:-1]
-        funcs = [x.split(':')[1] for x in func_and_anats if 'func:' in x] # will be full paths to fly/expt
-        anats = [x.split(':')[1] for x in func_and_anats if 'anat:' in x]
-
 while [[ $# -gt 0 ]]; do
   case $1 in
     -b|--build_flies)
