@@ -41,10 +41,10 @@ def main(args):
 	# REQUIRED args
 	if standalone:
 		dataset_path = '/oak/stanford/groups/trc/data/David/Bruker/preprocessed/fly_001/func1/imaging'
-		if 'func' in directory:
+		if 'func' in dataset_path:
 			brain_master = 'functional_channel_1.nii'
 			brain_mirror = 'functional_channel_2.nii'
-		elif 'anat' in directory:
+		elif 'anat' in dataset_path:
 			brain_master = 'anatomy_channel_1.nii'
 			brain_mirror = 'anatomy_channel_2.nii'
 
