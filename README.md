@@ -54,6 +54,24 @@ Log onto sherlock (ssh sunetid@login.sherlock.stanford.edu)
 #> python3 setup.py install
 ```
 
+To install on my M2 Mac:
+install homebrew: https://brew.sh/
+```shell
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+brew install libpng
+```
+
+Create environment
+```shell
+python3 -m venv .env_brainsss_david
+source .env_brainsss_david/bin/activate
+```
+
+download wheel for arm Mac https://github.com/dipterix/rpyANTs/releases/tag/0.0.1.9000
+```shell
+pip install YOUR WHEEL, for example: pip install antspyx-0.3.8-cp310-cp310-macosx_13_0_arm64.whl
+````
+
 To run c++ code
 ```shell
 pip install cppimport
