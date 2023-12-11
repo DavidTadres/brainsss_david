@@ -54,7 +54,7 @@ Log onto sherlock (ssh sunetid@login.sherlock.stanford.edu)
 #> python3 setup.py install
 ```
 
-To install on my M2 Mac:
+To install on my M2 Mac (also see: https://github.com/ANTsX/ANTsPy/issues/519)
 install homebrew: https://brew.sh/
 ```shell
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
